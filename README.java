@@ -1,19 +1,3 @@
-res
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -22,7 +6,9 @@ public class RestaurantApp {
 
     static Scanner input = new Scanner(System.in);
 
+    // ============================
     // Class to store order data
+    // ============================
     static class OrderItem {
         String name;
         String size;
@@ -41,28 +27,27 @@ public class RestaurantApp {
         public int getTotal() {
             return price * quantity;
         }
-
-        @Override
-        public String toString() {
-            String add = additions.isEmpty() ? "No additions" : String.join(" + ", additions);
-            return name + " (" + size + ") + " + add + " ×" + quantity + " = " + getTotal() + " DZD";
-        }
     }
 
-    // Food menu
+    // ============================
+    // Menu items
+    // ============================
     static String[] menuItems = {
-            "Chicken Shawarma", "Beef Shawarma", "Chicken Tacos", "Beef Tacos"
+        "Chicken Shawarma", "Beef Shawarma", "Chicken Tacos", "Beef Tacos"
     };
     static int[] prices = {300, 350, 400, 450};
 
     static List<OrderItem> orderList = new ArrayList<>();
 
+    // ============================
+    // Main method
+    // ============================
     public static void main(String[] args) {
         mainMenu();
     }
 
     // ============================
-    //  Main Menu
+    // Main Menu
     // ============================
     public static void mainMenu() {
         while (true) {
@@ -74,7 +59,7 @@ public class RestaurantApp {
             System.out.println("3. Confirm Order & Print Receipt");
             System.out.println("4. Exit");
             System.out.println("---------------------------------");
-            System.out.print("Please enter your choice: ");
+            System.out.print("Your choice: ");
             String choice = input.nextLine();
 
             switch (choice) {
@@ -88,16 +73,16 @@ public class RestaurantApp {
                     confirmOrder();
                     break;
                 case "4":
-                    System.out.println("Thank you for visiting Al-Nakheel Restaurant ");
+                    System.out.println("Thank you for visiting Al-Nakheel Restaurant");
                     return;
                 default:
-                    System.out.println(" Invalid option. Please try again.");
+                    System.out.println("Invalid choice, please try again.");
             }
         }
     }
 
     // ============================
-    //  Show Menu (with categories)
+    // Show Menu
     // ============================
     public static void showMenu() {
         System.out.println("\n==============================");
@@ -111,7 +96,7 @@ public class RestaurantApp {
         System.out.println("2. Beef Shawarma - 350 DZD");
 
         System.out.println("--------------------------------------------------");
-        System.out.println("                   TACOS");
+        System.out.println("                  TACOS");
         System.out.println("--------------------------------------------------");
         System.out.println("3. Chicken Tacos - 400 DZD");
         System.out.println("4. Beef Tacos - 450 DZD");
@@ -119,21 +104,21 @@ public class RestaurantApp {
         System.out.println("--------------------------------------------------");
         System.out.println("0. Return to Main Menu");
         System.out.println("--------------------------------------------------");
-        System.out.print("Select meal number: ");
+        System.out.print("Your choice: ");
 
         int choice = Integer.parseInt(input.nextLine());
 
         if (choice == 0) return;
         if (choice < 1 || choice > menuItems.length) {
-            System.out.println(" Invalid number.");
+            System.out.println("Invalid number.");
             return;
         }
 
-addToOrder(choice - 1);
+        addToOrder(choice - 1);
     }
 
     // ============================
-    // ➕ Add New Meal
+    // Add New Meal
     // ============================
     public static void addToOrder(int index) {
         String name = menuItems[index];
@@ -162,11 +147,11 @@ addToOrder(choice - 1);
                 size = "Small";
         }
 
-        System.out.println("Would you like to add:");
+        System.out.println("Would you like any additions?");
         System.out.println("1. Spicy Sauce");
         System.out.println("2. Mayonnaise");
-        System.out.println("3. No additions");
-        System.out.print("(You can type two numbers separated by space): ");
+        System.out.println("3. No Additions");
+        System.out.print("(You can type two numbers together, e.g., 1 2): ");
         String addChoice = input.nextLine();
 
         List<String> additions = new ArrayList<>();
@@ -176,10 +161,9 @@ addToOrder(choice - 1);
         OrderItem item = new OrderItem(name, size, additions, qty, price);
         orderList.add(item);
 
-        System.out.println("\"" + name + " (" + size + ")\" added successfully (x" + qty + ").");
+        System.out.println("\"" + name + " " + size + "\" has been added successfully ×" + qty);
         System.out.println("---------------------------------");
 
-        System.out.println("Would you like to:");
         System.out.println("1. Return to Menu");
         System.out.println("2. Return to Main Menu");
         System.out.print("Your choice: ");
@@ -188,11 +172,11 @@ addToOrder(choice - 1);
     }
 
     // ============================
-    // 🧾 Edit Order
+    // Edit Current Order
     // ============================
     public static void editOrder() {
         if (orderList.isEmpty()) {
-            System.out.println(" No current order.");
+            System.out.println("No current order.");
             return;
         }
 
@@ -213,19 +197,19 @@ addToOrder(choice - 1);
                     System.out.print("Confirm deletion? (1. Yes / 2. No): ");
                     String confirm = input.nextLine();
                     if (confirm.equals("1")) {
-                        System.out.println(" \"" + orderList.get(idx).name + "\" deleted successfully.");
+                        System.out.println("\"" + orderList.get(idx).name + "\" was deleted successfully.");
                         orderList.remove(idx);
                     }
                 }
                 break;
             case "2":
-                System.out.print("Enter the number of the item to edit: ");
+                System.out.print("Enter the number of the item to edit quantity: ");
                 int id = Integer.parseInt(input.nextLine()) - 1;
                 if (id >= 0 && id < orderList.size()) {
                     System.out.print("Enter new quantity: ");
                     int newQty = Integer.parseInt(input.nextLine());
                     orderList.get(id).quantity = newQty;
-                    System.out.println(" Quantity updated successfully.");
+                    System.out.println("Quantity updated successfully.");
                 }
                 break;
             default:
@@ -234,49 +218,88 @@ addToOrder(choice - 1);
     }
 
     // ============================
-    //  Confirm Order & Print Receipt
+    // Confirm Order and Print Receipt
     // ============================
     public static void confirmOrder() {
         if (orderList.isEmpty()) {
-            System.out.println(" No order to confirm.");
+            System.out.println("No order to confirm.");
             return;
         }
 
-        System.out.println("\n======= Al-Nakheel Restaurant=======");
-        System.out.println("Order No: 001");
-        System.out.println("----------------------------");
-        showCurrentOrder();
-        int total = getTotal();
-        System.out.println("----------------------------");
-        System.out.println("Total Amount: " + total + " DZD");
-        System.out.println("----------------------------");
+        System.out.println("\n======= Al-Nakheel Restaurant =======");
+        printReceipt(); // print receipt with order number
+
         System.out.print("Do you want to confirm the order? (1. Yes / 2. No): ");
         String confirm = input.nextLine();
 
         if (confirm.equals("1")) {
-            System.out.println("\n Order confirmed.");
-            System.out.println("Thank you for your order ");
+            System.out.println("\nOrder confirmed successfully.");
+            System.out.println("Thank you for choosing Al-Nakheel Restaurant.");
             orderList.clear();
         }
     }
 
     // ============================
-    //  Show Current Order
+    // Show Current Order
     // ============================
     public static void showCurrentOrder() {
+        if (orderList.isEmpty()) {
+            System.out.println("No current order.");
+            return;
+        }
+
+        System.out.println("\n======= Current Order =======");
         int i = 1;
         int total = 0;
+
         for (OrderItem item : orderList) {
-            System.out.println(i + ". " + item);
-            total += item.getTotal();
+            int itemTotal = item.getTotal();
+            total += itemTotal;
+
+            String add = item.additions.isEmpty() ? "" : " + " + String.join(" + ", item.additions);
+
+            System.out.println(i + ". " + item.name + " " + item.size + add + " ×" + item.quantity + " = " + itemTotal + " DZD");
             i++;
         }
-        System.out.println("----------------------------");
-        System.out.println("Current Total: " + total + " DZD");
+
+        System.out.println("--------------------------");
+        System.out.println("Total: " + total + " DZD");
     }
 
     // ============================
-    //  Calculate Total
+    // Print the Receipt
+    // ============================
+    public static void printReceipt() {
+        if (orderList.isEmpty()) {
+            System.out.println("No order to print.");
+            return;
+        }
+
+        System.out.println("\n======= RECEIPT =======");
+
+        // Generate random order number
+        int orderNumber = (int) (Math.random() * 10000);
+        System.out.println("Order Number: #" + orderNumber);
+        System.out.println("--------------------------");
+
+        int i = 1;
+        int total = 0;
+
+        for (OrderItem item : orderList) {
+            int itemTotal = item.getTotal();
+            total += itemTotal;
+            String add = item.additions.isEmpty() ? "" : " + " + String.join(" + ", item.additions);
+            System.out.println(i + ". " + item.name + " " + item.size + add + " ×" + item.quantity + " = " + itemTotal + " DZD");
+            i++;
+        }
+
+        System.out.println("--------------------------");
+        System.out.println("Total amount: " + total + " DZD");
+        System.out.println("Thank you for your order!");
+    }
+
+    // ============================
+    // Calculate Total
     // ============================
     public static int getTotal() {
         int total = 0;
@@ -285,4 +308,4 @@ addToOrder(choice - 1);
         }
         return total;
     }
-}
+            }
